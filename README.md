@@ -10,3 +10,4 @@ A complete DevOps lab demonstrating automated multi-node Kubernetes cluster conf
 - **Package Management:** Helm v3
 - **Infrastructure Automation:** Ansible playbooks
 - **CI/CD Pipeline:** GitHub Actions with a local Self-Hosted Runner on the master node
+# K8s DevOps Pipeline Test
