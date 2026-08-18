@@ -19,11 +19,9 @@ jobs:
         password: ${{ secrets.DOCKHUB_DEVOPS2 }}
 
     - name: Build and Push Docker Image
-      uses: docker/build-push-action@v5
-      with:
-        context: .
-        push: true
-        tags: hanif040/k8s-demo:${{ github.sha }}
+      run: |
+        docker build -t hanif040/k8s-demo:${{ github.sha }} .
+        docker push hanif040/k8s-demo:${{ github.sha }}
 
     - name: Deploy or Upgrade NGINX via Helm
       run: |
