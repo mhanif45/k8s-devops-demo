@@ -19,8 +19,6 @@ jobs:
         password: ${{ secrets.DOCKHUB_DEVOPS2 }}
 
     - name: Build and Push Docker Image
-      env:
-        DOCKER_API_VERSION: "1.43"
       run: |
         docker build -t hanif040/k8s-demo:${{ github.sha }} .
         docker push hanif040/k8s-demo:${{ github.sha }}
