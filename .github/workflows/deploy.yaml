@@ -1,26 +1,34 @@
-name: Deploy NGINX to Kubernetes Cluster
+name: Build and Deploy Custom Container Image
 
 on:
   push:
     branches: [ "main" ]
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: self-hosted
 
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v4
 
-    - name: Verify Cluster Connection
-      run: |
-        kubectl cluster-info
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKHUB_DEVOPS }}
+        password: ${{ secrets.DOCKHUB_DEVOPS2 }}
 
-    - name: Create or Update HTML ConfigMap
-      run: |
-        kubectl create configmap custom-html-config --from-file=index.html=site/index.html --dry-run=client -o yaml | kubectl apply -f -
+    - name: Build and Push Docker Image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        push: true
+        tags: hanif040/k8s-demo:${{ github.sha }}
 
     - name: Deploy or Upgrade NGINX via Helm
       run: |
         helm upgrade --install my-web oci://registry-1.docker.io/bitnamicharts/nginx \
-          -f values.yaml
+          --set image.repository=hanif040/k8s-demo \
+          --set image.tag=${{ github.sha }} \
+          --set service.type=NodePort \
+          --set service.nodePorts.http=31167
