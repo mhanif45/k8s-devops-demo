@@ -30,4 +30,7 @@ jobs:
           --set image.tag=${{ github.sha }} \
           --set service.type=NodePort \
           --set service.nodePorts.http=31167 \
-          --set global.security.allowInsecureImages=true
+          --set global.security.allowInsecureImages=true \
+          --set cloneStaticSiteFromInitContainer=false \
+          --set command=null \
+          --set args=null
