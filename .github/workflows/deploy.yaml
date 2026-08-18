@@ -32,5 +32,5 @@ jobs:
           --set service.nodePorts.http=31167 \
           --set global.security.allowInsecureImages=true \
           --set cloneStaticSiteFromInitContainer=false \
-          --set command=null \
-          --set args=null
+          --set volumePermissions.enabled=false \
+          --set containerPort=80
