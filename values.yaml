@@ -1,0 +1,15 @@
+serverBlock: |
+  server {
+      listen 8080;
+      location / {
+          root /opt/bitnami/nginx/html;
+          index index.html;
+      }
+  }
+
+staticSiteConfigmap: "custom-html-config"
+
+service:
+  type: NodePort
+  nodePorts:
+    http: 31167

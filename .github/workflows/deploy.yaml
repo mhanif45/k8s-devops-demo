@@ -9,21 +9,18 @@ jobs:
     runs-on: self-hosted
 
     steps:
-    - name: Checkout Code
+    - name: Checkout Repository
       uses: actions/checkout@v4
 
     - name: Verify Cluster Connection
       run: |
         kubectl cluster-info
-        kubectl get nodes
+
+    - name: Create or Update HTML ConfigMap
+      run: |
+        kubectl create configmap custom-html-config --from-file=index.html=site/index.html --dry-run=client -o yaml | kubectl apply -f -
 
     - name: Deploy or Upgrade NGINX via Helm
       run: |
-        helm repo add bitnami https://charts.bitnami.com/bitnami
-        helm repo update
-        helm upgrade --install my-web bitnami/nginx
-
-    - name: Ensure NodePort Service
-      run: |
-        kubectl patch svc my-web-nginx -p '{"spec": {"type": "NodePort"}}'
-        kubectl get svc my-web-nginx
+        helm upgrade --install my-web oci://registry-1.docker.io/bitnamicharts/nginx \
+          -f values.yaml
